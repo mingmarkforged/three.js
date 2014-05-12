@@ -70,6 +70,7 @@ THREE.FrontFaceDirectionCCW = 1;
 THREE.BasicShadowMap = 0;
 THREE.PCFShadowMap = 1;
 THREE.PCFSoftShadowMap = 2;
+THREE.PDShadowMap = 3;
 
 // MATERIAL CONSTANTS
 
