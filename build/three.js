@@ -14318,7 +14318,14 @@ THREE.Material.prototype = {
 
 	setValues: function ( values ) {
 
+
 		if ( values === undefined ) return;
+
+		if (values.vertexColors && values.attributes) {
+			if (!values.attributes.vOp) {
+				console.warn('No vertex opacity specified, vertex colors require attribute float vOp');
+			}
+		}
 
 		for ( var key in values ) {
 
@@ -14428,6 +14435,8 @@ THREE.MaterialIdCount = 0;
  * }
  */
 
+// Modified to require an attribute float vOp in the case that vertex
+// colors are used, vOp is a value between 0 and 1
 THREE.LineBasicMaterial = function ( parameters ) {
 
 	THREE.Material.call( this );
