@@ -14443,6 +14443,7 @@ THREE.LineBasicMaterial = function ( parameters ) {
 	this.fog = true;
 
 	this.setValues( parameters );
+	this.attributes = parameters.attributes;
 
 };
 
@@ -17568,7 +17569,7 @@ THREE.CanvasRenderer = function ( parameters ) {
 
 /**
  * Shader chunks for WebLG Shader library
- * 
+ *
  * @author alteredq / http://alteredqualia.com/
  * @author mrdoob / http://mrdoob.com/
  * @author mikael emtinger / http://gomo.se/
@@ -18655,6 +18656,7 @@ THREE.ShaderChunk = {
 		"#ifdef USE_COLOR",
 
 		"	varying vec3 vColor;",
+		"	varying float vOpacity;",
 
 		"#endif"
 
@@ -18665,7 +18667,7 @@ THREE.ShaderChunk = {
 
 		"#ifdef USE_COLOR",
 
-		"	gl_FragColor = gl_FragColor * vec4( vColor, 1.0 );",
+		"	gl_FragColor = gl_FragColor * vec4( vColor, vOpacity );",
 
 		"#endif"
 
@@ -18675,7 +18677,9 @@ THREE.ShaderChunk = {
 
 		"#ifdef USE_COLOR",
 
+		"	attribute float vOp;",
 		"	varying vec3 vColor;",
+		"	varying float vOpacity;",
 
 		"#endif"
 
@@ -18689,10 +18693,12 @@ THREE.ShaderChunk = {
 		"	#ifdef GAMMA_INPUT",
 
 		"		vColor = color * color;",
+		"		vOpacity = vOp;",
 
 		"	#else",
 
 		"		vColor = color;",
+		"		vOpacity = vOp;",
 
 		"	#endif",
 
@@ -19115,7 +19121,7 @@ THREE.ShaderChunk = {
 		"				vec3 shadowZ = vec3( shadowCoord.z );",
 		"				shadowKernel[0] = vec3(lessThan(depthKernel[0], shadowZ ));",
 		"				shadowKernel[0] *= vec3(0.25);",
-													
+
 		"				shadowKernel[1] = vec3(lessThan(depthKernel[1], shadowZ ));",
 		"				shadowKernel[1] *= vec3(0.25);",
 
@@ -19138,20 +19144,20 @@ THREE.ShaderChunk = {
 		"				shadowColor = shadowColor * vec3( ( 1.0 - shadowDarkness[ i ] * shadow ) );",
 
 		"			#else",
-		
+
 						"vec4 rgbaDepth;",
 						"float fDepth;",
 						"float modAng;",
 						"//mat4 samples;",
 						"//float minDiff = 1000000.0;",
-						"float sum = 0.0;", 
+						"float sum = 0.0;",
 						"float scale = 1.0/1024.0 * 3.0;",
 						"float ang = fract(sin(dot(shadowCoord.xy ,vec2(12.9898,78.233))) * 43758.5453) * 3.14159;",
-						
+
 						"//float fDepthBase = unpackDepth(texture2D( shadowMap[i], shadowCoord.xy));",
 						"//float sf = clamp(-(fDepthBase - (shadowCoord.z)) * 0.1,0.0,1.0);",
 						"//scale *= clamp(sf * 500.0,1.0,50.0);",
-						
+
 						"modAng = 1.2466452 + ang;",
 						"fDepth = unpackDepth(texture2D( shadowMap[i], shadowCoord.xy + vec2(sin(modAng),cos(modAng)) * 0.99999994 * scale ));",
 						"if (fDepth < shadowCoord.z + shadowBias[i]) {",
@@ -19240,7 +19246,7 @@ THREE.ShaderChunk = {
 
 
 
- 
+
 							// spot with multiple shadows is darker
 
 						"shadowColor = shadowColor * (vec3( 1.0 - shadowDarkness[ i ]*sum/17.0));",
@@ -19331,7 +19337,7 @@ THREE.ShaderChunk = {
 	// http://outerra.blogspot.com/2012/11/maximizing-depth-buffer-range-and.html
 
 	// WebGL doesn't support gl_FragDepth out of the box, unless the EXT_frag_depth extension is available.  On platforms
-	// without EXT_frag_depth, we have to fall back on linear z-buffer in the fragment shader, which means that some long 
+	// without EXT_frag_depth, we have to fall back on linear z-buffer in the fragment shader, which means that some long
 	// faces close to the camera may have issues.	This can be worked around by tesselating the model more finely when
 	// the camera is near the surface.
 
