@@ -20,6 +20,8 @@
  * }
  */
 
+// Modified to require an attribute float vOp in the case that vertex
+// colors are used, vOp is a value between 0 and 1
 THREE.LineBasicMaterial = function ( parameters ) {
 
 	THREE.Material.call( this );

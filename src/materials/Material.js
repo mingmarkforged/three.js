@@ -44,7 +44,14 @@ THREE.Material.prototype = {
 
 	setValues: function ( values ) {
 
+
 		if ( values === undefined ) return;
+
+		if (values.vertexColors && values.attributes) {
+			if (!values.attributes.vOp) {
+				console.warn('No vertex opacity specified, vertex colors require attribute float vOp');
+			}
+		}
 
 		for ( var key in values ) {
 
