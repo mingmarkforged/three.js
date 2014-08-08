@@ -4439,6 +4439,7 @@ THREE.WebGLRenderer = function ( parameters ) {
 
 			if ( material instanceof THREE.ShaderMaterial ||
 				 material instanceof THREE.MeshPhongMaterial ||
+				 material instanceof THREE.LineBasicMaterial ||
 				 material.envMap ) {
 
 				if ( p_uniforms.cameraPosition !== null ) {

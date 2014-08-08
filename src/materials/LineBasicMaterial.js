@@ -26,6 +26,8 @@ THREE.LineBasicMaterial = function ( parameters ) {
 
 	THREE.Material.call( this );
 
+  this.uniforms = {};
+
 	this.color = new THREE.Color( 0xffffff );
 
 	this.linewidth = 1;
@@ -48,6 +50,8 @@ THREE.LineBasicMaterial.prototype.clone = function () {
 	var material = new THREE.LineBasicMaterial();
 
 	THREE.Material.prototype.clone.call( this, material );
+
+	material.uniforms = THREE.UniformsUtils.clone( this.uniforms );
 
 	material.color.copy( this.color );
 

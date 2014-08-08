@@ -1109,6 +1109,7 @@ THREE.ShaderChunk = {
 		"#ifdef USE_COLOR",
 
 		"	attribute float vOp;",
+		"	attribute float vSide;",
 		"	varying vec3 vColor;",
 		"	varying float vOpacity;",
 
@@ -1129,7 +1130,9 @@ THREE.ShaderChunk = {
 		"	#else",
 
 		"		vColor = color;",
-		"		vOpacity = vOp;",
+    //"   vec4 temp;",
+    //"   temp = modelViewMatrix * vec4( position, 1.0 );",
+    "	  vOpacity = vOp * vSide * ( step(position.y + modelViewMatrix[3][1], cameraPosition.y ) * 2.0 - 1.0 );",	
 
 		"	#endif",
 
